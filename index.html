@@ -14,6 +14,8 @@
       display: flex; align-items: center; border: 1px solid #ccc;
       border-radius: 10px; padding: 10px; margin-bottom: 10px;
       cursor: pointer;
+      animation: slideInLeft 0.5s ease forwards;
+      opacity: 0;
     }
     .product-card img, .payment-option img {
       width: 50px; height: 50px; margin-right: 15px;
@@ -26,81 +28,33 @@
       color: white; border: none; border-radius: 8px; cursor: pointer;
     }
     button:hover { background-color: #218838; }
-    
-        .menu-toggle {
-      position: absolute;
-      left: 1rem;
-      top: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+
+    @keyframes slideInLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
-    .menu-toggle span {
-      width: 25px;
-      height: 3px;
-      background-color: #00ffd5;
-      border-radius: 2px;
-      transition: 0.4s;
+    .product-card:nth-child(n) {
+      animation-delay: calc(0.1s * var(--i));
     }
 
-    /* NAV sebagai overlay fixed */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 50%;
-      background: rgba(17, 17, 17, 0.95);
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 1.5rem;
-      z-index: 1000;
-      padding: 2rem;
+    .payment-option:nth-child(n) {
+      animation-delay: calc(0.1s * var(--i));
     }
 
-    nav a {
-      color: #00ffd5;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.1rem;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #00c7ab;
-    }
-
-    /* Blur efek saat menu terbuka */
-    .blur {
-      filter: blur(8px);
-      transition: filter .3s;
-    }
-
-    /* Tombol silang di pojok kanan atas */
-    .close-menu {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 2rem;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .close-menu:hover {
-      color: #00ffd5;
-    }
-    
   </style>
 </head>
 <body>
-    
-    <h1>Marketplace SwiperFvck</h1>
 
-   <div class="product-card" onclick="selectProduct(this, 'Panel 1GB - Rp2.000')">
+    <h1>Marketplace SwiperFvck</h1>
+  <h3>List Panel:</h3>
+    <div class="product-card" onclick="selectProduct(this, 'Panel 1GB - Rp2.000')">
         <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 1gb" />
         <span>Panel 1GB - Rp2.000</span>
       </div>
@@ -165,6 +119,7 @@
         <span>Jasa Rename Sc - Rp15.000</span>
       </div>
       
+      <h3>List Jasa:</h3>
       <div class="product-card" onclick="selectProduct(this, 'Jasa Fix Sc Error - Rp15.000')">
         <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa fix sc error" />
         <span>Jasa Fix Sc Error - Rp15.000</span>
@@ -185,6 +140,7 @@
         <span>Jasa Add Fitur - Rp10.000</span>
       </div>
       
+      <h3>List Script:</h3>
       <div class="product-card" onclick="selectProduct(this, 'Sc Cpanel No Enc - Rp15.000')">
         <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc cpanel no enc" />
         <span>Sc Cpanel No Enc - Rp15.000</span>
@@ -217,24 +173,22 @@
         <img src="https://files.catbox.moe/ywg4hq.jpg" alt="DANA" />
         <span>DANA</span>
       </div>
+      
       <div class="payment-option" onclick="selectPayment(this, 'OVO')">
         <img src="https://files.catbox.moe/3sgf4s.jpg" alt="OVO" />
         <span>OVO</span>
       </div>
+      
       <div class="payment-option" onclick="selectPayment(this, 'GOPAY')">
         <img src="https://files.catbox.moe/s4rd2a.jpg" alt="GOPAY" />
         <span>GOPAY</span>
       </div>
+      
       <div class="payment-option" onclick="selectPayment(this, 'QRIS')">
         <img src="https://files.catbox.moe/hvy8on.jpg" alt="QRIS" />
         <span>QRIS</span>
       </div>
     </div>
-
-    <div class="submit">
-      <button onclick="orderNow()"><strong>Beli Sekarang</strong></button>
-    </div>
-  </div>
 
   <script>
     let selectedProduct = "";
@@ -259,12 +213,12 @@
       }
 
       const message = `${selectedPayment} bang gw pengen beli\n\nProduk: ${selectedProduct}`;
-      const phoneNumber = "6282115117899"; // Ganti dengan nomor WA kamu
+      const phoneNumber = "6282115117899";
       const encodedMessage = encodeURIComponent(message);
 
       window.location.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     }
-    
+
     function toggleMenu() {
       const nav = document.getElementById('nav');
       const main = document.querySelector('.contact-container');
@@ -272,6 +226,14 @@
       nav.style.display = open ? 'flex' : 'none';
       main.classList.toggle('blur', open);
     }
+
+    // Tambahkan delay index untuk animasi produk dan pembayaran
+    document.querySelectorAll('.product-card').forEach((el, i) => {
+      el.style.setProperty('--i', i + 1);
+    });
+    document.querySelectorAll('.payment-option').forEach((el, i) => {
+      el.style.setProperty('--i', i + 1);
+    });
   </script>
 </body>
 </html>
