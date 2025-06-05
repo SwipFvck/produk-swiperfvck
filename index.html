@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketplace SwiperFvck</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: white; background-color: black; padding: 20px; }
+    .container { max-width: 600px;
+    margin: 0 auto; }
+    .product, .payment, .submit {
+      margin-top: 20px; }
+    .product-card, .payment-option {
+      display: flex; align-items: center; border: 1px solid #ccc;
+      border-radius: 10px; padding: 10px; margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .product-card img, .payment-option img {
+      width: 50px; height: 50px; margin-right: 15px;
+    }
+    .product-card.selected, .payment-option.selected {
+      border: 2px solid #007bff; background-color: black;
+    }
+    button {
+      padding: 15px; font-size: 16px; width: 100%; background-color: #28a745;
+      color: white; border: none; border-radius: 8px; cursor: pointer;
+    }
+    button:hover { background-color: #218838; }
+    
+        .menu-toggle {
+      position: absolute;
+      left: 1rem;
+      top: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background-color: #00ffd5;
+      border-radius: 2px;
+      transition: 0.4s;
+    }
+
+    /* NAV sebagai overlay fixed */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 50%;
+      background: rgba(17, 17, 17, 0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
+      z-index: 1000;
+      padding: 2rem;
+    }
+
+    nav a {
+      color: #00ffd5;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #00c7ab;
+    }
+
+    /* Blur efek saat menu terbuka */
+    .blur {
+      filter: blur(8px);
+      transition: filter .3s;
+    }
+
+    /* Tombol silang di pojok kanan atas */
+    .close-menu {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .close-menu:hover {
+      color: #00ffd5;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <!-- menu overlay -->
+  <nav id="nav">
+    <div class="close-menu" onclick="toggleMenu()">×</div>
+    <a href="menu.html">Menu Utama</a>
+    <a href="social.html">Social</a>
+    <a href="info.html">Info Me</a>
+  </nav>
+    
+    <h1>Marketplace SwiperFvck</h1>
+
+   <div class="product-card" onclick="selectProduct(this, 'Panel 1GB - Rp2.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 1gb" />
+        <span>Panel 1GB - Rp2.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 2GB - Rp3.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 2gb" />
+        <span>Panel 2GB - Rp3.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 3GB - Rp4.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 3gb" />
+        <span>Panel 3GB - Rp4.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 4GB - Rp5.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 4gb" />
+        <span>Panel 4GB - Rp5.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 5GB - Rp6.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 5gb" />
+        <span>Panel 5GB - Rp6.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 6GB - Rp7.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 6gb" />
+        <span>Panel 6GB - Rp7.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 7GB - Rp8.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 7gb" />
+        <span>Panel 7GB - Rp8.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 8GB - Rp9.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 8gb" />
+        <span>Panel 8GB - Rp9.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 9GB - Rp10.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 9gb" />
+        <span>Panel 9GB - Rp10.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel 10GB - Rp11.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 10gb" />
+        <span>Panel 10GB - Rp11.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Panel Unli - Rp12.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel unli" />
+        <span>Panel Unli - Rp12.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Reseller Panel - Rp5.000')">
+        <img src="https://files.catbox.moe/l1cya6.jpg" alt="reseller panel" />
+        <span>Reseller Panel - Rp5.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Jasa Rename Sc - Rp15.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa rename sc" />
+        <span>Jasa Rename Sc - Rp15.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Jasa Fix Sc Error - Rp15.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa fix sc error" />
+        <span>Jasa Fix Sc Error - Rp15.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Jasa Add Key - Rp10.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa add key" />
+        <span>Jasa Add Key - Rp10.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Jasa Create Sc - Rp35.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa create sc" />
+        <span>Jasa Create Sc - Rp35.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Jasa Add Fitur - Rp10.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa add fitur" />
+        <span>Jasa Add Fitur - Rp10.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Sc Cpanel No Enc - Rp15.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc cpanel no enc" />
+        <span>Sc Cpanel No Enc - Rp15.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Sc Push Kontak No Enc - Rp10.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc push kontak no enc" />
+        <span>Sc Push Kontak No Enc - Rp10.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Sc Levi Botz No Enc - Rp15.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc levi botz no enc" />
+        <span>Sc Levi Botz No Enc - Rp15.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Sc Cpanel Fvckers No Enc - Rp15.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc cpanel fvckers no enc" />
+        <span>Sc Cpanel Fvckers No Enc - Rp15.000</span>
+      </div>
+      
+      <div class="product-card" onclick="selectProduct(this, 'Sc Itachi MD No Enc - Rp55.000')">
+        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc itachi md no enc" />
+        <span>Sc Itachi MD No Enc - Rp55.000</span>
+      </div>
+    </div>
+
+    <div class="payment">
+      <h3>Metode Pembayaran:</h3>
+      <div class="payment-option" onclick="selectPayment(this, 'DANA')">
+        <img src="https://files.catbox.moe/ywg4hq.jpg" alt="DANA" />
+        <span>DANA</span>
+      </div>
+      <div class="payment-option" onclick="selectPayment(this, 'OVO')">
+        <img src="https://files.catbox.moe/3sgf4s.jpg" alt="OVO" />
+        <span>OVO</span>
+      </div>
+      <div class="payment-option" onclick="selectPayment(this, 'GOPAY')">
+        <img src="https://files.catbox.moe/s4rd2a.jpg" alt="GOPAY" />
+        <span>GOPAY</span>
+      </div>
+      <div class="payment-option" onclick="selectPayment(this, 'QRIS')">
+        <img src="https://files.catbox.moe/hvy8on.jpg" alt="QRIS" />
+        <span>QRIS</span>
+      </div>
+    </div>
+
+    <div class="submit">
+      <button onclick="orderNow()"><strong>Beli Sekarang</strong></button>
+    </div>
+  </div>
+
+  <script>
+    let selectedProduct = "";
+    let selectedPayment = "";
+
+    function selectProduct(el, product) {
+      document.querySelectorAll('.product-card').forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedProduct = product;
+    }
+
+    function selectPayment(el, method) {
+      document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPayment = method;
+    }
+
+    function orderNow() {
+      if (!selectedProduct || !selectedPayment) {
+        alert("Silakan pilih produk dan metode pembayaran dulu.");
+        return;
+      }
+
+      const message = `${selectedPayment} bang gw pengen beli\n\nProduk: ${selectedProduct}`;
+      const phoneNumber = "6282115117899"; // Ganti dengan nomor WA kamu
+      const encodedMessage = encodeURIComponent(message);
+
+      window.location.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    }
+    
+    function toggleMenu() {
+      const nav = document.getElementById('nav');
+      const main = document.querySelector('.contact-container');
+      const open = nav.style.display !== 'flex';
+      nav.style.display = open ? 'flex' : 'none';
+      main.classList.toggle('blur', open);
+    }
+  </script>
+</body>
+</html>
