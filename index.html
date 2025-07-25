@@ -1,249 +1,557 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marketplace SwiperFvck</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiper Marketplace</title>
   <style>
-    body { font-family: Arial, sans-serif; color: white; background-color: black; padding: 20px; }
-    .container { max-width: 600px;
-    margin: 0 auto; }
-    .product, .payment, .submit {
-      margin-top: 20px; }
-    .product-card, .payment-option {
-      display: flex; align-items: center; border: 1px solid #ccc;
-      border-radius: 10px; padding: 10px; margin-bottom: 10px;
-      cursor: pointer;
-      animation: slideInLeft 0.5s ease forwards;
-      opacity: 0;
-    }
-    .product-card img, .payment-option img {
-      width: 50px; height: 50px; margin-right: 15px;
-    }
-    .product-card.selected, .payment-option.selected {
-      border: 2px solid #007bff; background-color: black;
-    }
-    button {
-      padding: 15px; font-size: 16px; width: 100%; background-color: #28a745;
-      color: white; border: none; border-radius: 8px; cursor: pointer;
-    }
-    button:hover { background-color: #218838; }
+    body {font-family: 'Poppins', sans-serif;background: #f5f5f5;margin: 0;padding: 20px;text-align: center;}
+    h2 { margin-bottom: 15px; }
 
-    @keyframes slideInLeft {
-      0% {
-        opacity: 0;
-        transform: translateX(-50px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
+    /* Profil */
+    .profile { text-align: center; margin-bottom: 30px; }
+    .profile img {width: 120px; height: 120px; object-fit: cover;border-radius: 50%; border: 4px solid #007bff;}
+    .profile h3 { margin-top: 10px; font-size: 22px; }
+    .profile p { color: #666; font-size: 14px; max-width: 300px; margin: 5px auto 0; }
 
-    .product-card:nth-child(n) {
-      animation-delay: calc(0.1s * var(--i));
-    }
+    /* Marketplace */
+    .marketplace { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scroll-behavior: smooth; }
+    .marketplace::-webkit-scrollbar { display: none; }
+    .product {min-width: 200px; background: white; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);overflow: hidden; flex-shrink: 0; cursor: pointer;}
+    .product img { width: 100%; height: 150px; object-fit: cover; }
+    .product-info { padding: 10px; }
+    .product-info h3 { margin: 0; font-size: 16px; }
+    .price { color: #ff5722; font-weight: bold; margin: 5px 0; }
+    .btn {display: inline-block; background: #007bff; color: white; padding: 8px 12px;text-decoration: none; border-radius: 8px; font-size: 14px; margin-top: 5px;transition: background 0.2s;}
+    .btn:hover { background: #0056b3; }
+    .btn-secondary { background:#28a745; }
+    .btn-secondary:hover { background:#1e7e34; }
 
-    .payment-option:nth-child(n) {
-      animation-delay: calc(0.1s * var(--i));
-    }
+    /* Modal */
+    .modal {display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); justify-content: center; align-items: center;opacity: 0; transition: opacity 0.3s ease;}
+    .modal.show { display: flex; opacity: 1; }
+    .modal-content {background: #1f1f1f; color: #fff; padding: 20px; border-radius: 15px; max-width: 400px; width: 90%;
+      text-align: left; position: relative; transform: translateY(50px); transition: transform 0.3s ease;}
+    .modal.show .modal-content { transform: translateY(0); }
+    .modal-content h2 { color: #0a7c2f; text-align: center; }
+    .modal-content img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+    .close-btn {position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #fff; cursor: pointer;}
+    .close-btn:hover { color: red; }
+    .quantity-control { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0; }
+    .quantity-control button {width: 30px; height: 30px; border: none; border-radius: 50%; background: #007bff; color: white; font-size: 18px;cursor: pointer;}
+    .quantity-control span { font-size: 18px; min-width: 20px; display: inline-block; }
+    input[type="text"] {width: 100%; padding: 8px; margin: 10px 0; border-radius: 8px; border: 1px solid #555; background:#2b2b2b; color:#fff;font-size: 14px;}
+    .coupon-area { display:flex; gap:5px; margin:10px 0; }
+    .coupon-area input { flex:1; }
+    .coupon-area button { background:#28a745; }
+    .price-info p { margin:4px 0; }
+    .wa-btn { display:block; width:100%; text-align:center; background:#28a745; padding:10px; color:#fff; font-weight:bold; border-radius:8px; text-decoration:none; }
+    .wa-btn:hover { background:#1e7e34; }
 
+    /* Mode detail */
+    #detailSection {font-size:14px;color:#ccc;margin-bottom:10px;line-height:1.5;}
   </style>
 </head>
 <body>
 
-    <h1>Marketplace SwiperFvck</h1>
-  <h3>List Panel:</h3>
-    <div class="product-card" onclick="selectProduct(this, 'Panel 1GB - Rp2.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 1gb" />
-        <span>Panel 1GB - Rp2.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 2GB - Rp3.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 2gb" />
-        <span>Panel 2GB - Rp3.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 3GB - Rp4.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 3gb" />
-        <span>Panel 3GB - Rp4.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 4GB - Rp5.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 4gb" />
-        <span>Panel 4GB - Rp5.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 5GB - Rp6.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 5gb" />
-        <span>Panel 5GB - Rp6.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 6GB - Rp7.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 6gb" />
-        <span>Panel 6GB - Rp7.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 7GB - Rp8.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 7gb" />
-        <span>Panel 7GB - Rp8.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 8GB - Rp9.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 8gb" />
-        <span>Panel 8GB - Rp9.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 9GB - Rp10.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 9gb" />
-        <span>Panel 9GB - Rp10.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel 10GB - Rp11.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel 10gb" />
-        <span>Panel 10GB - Rp11.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Panel Unli - Rp12.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="panel unli" />
-        <span>Panel Unli - Rp12.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Reseller Panel - Rp5.000')">
-        <img src="https://files.catbox.moe/l1cya6.jpg" alt="reseller panel" />
-        <span>Reseller Panel - Rp5.000</span>
-      </div>
-  
-      <h3>List Jasa:</h3>
-      <div class="product-card" onclick="selectProduct(this, 'Jasa Rename Sc - Rp15.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa rename sc" />
-        <span>Jasa Rename Sc - Rp15.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Jasa Fix Sc Error - Rp15.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa fix sc error" />
-        <span>Jasa Fix Sc Error - Rp15.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Jasa Add Key - Rp10.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa add key" />
-        <span>Jasa Add Key - Rp10.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Jasa Create Sc - Rp35.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa create sc" />
-        <span>Jasa Create Sc - Rp35.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Jasa Add Fitur - Rp10.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="jasa add fitur" />
-        <span>Jasa Add Fitur - Rp10.000</span>
-      </div>
-      
-      <h3>List Script:</h3>
-      <div class="product-card" onclick="selectProduct(this, 'Sc Cpanel No Enc - Rp15.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc cpanel no enc" />
-        <span>Sc Cpanel No Enc - Rp15.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Sc Push Kontak No Enc - Rp10.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc push kontak no enc" />
-        <span>Sc Push Kontak No Enc - Rp10.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Sc Levi Botz No Enc - Rp15.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc levi botz no enc" />
-        <span>Sc Levi Botz No Enc - Rp15.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Sc Cpanel FvckersV2 No Enc - Rp15.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc cpanel fvckersV2 no enc" />
-        <span>Sc Cpanel Fvckers V2 No Enc - Rp15.000</span>
-      </div>
+  <!-- Profil -->
+  <div class="profile">
+    <img src="https://files.catbox.moe/9etxzp.png" alt="Profile">
+    <h3>Swiper Store</h3>
+    <p>Swiper Marketplace adalah platform digital yang menyediakan berbagai solusi untuk kebutuhan hosting Anda. Saya fokus pada layanan cepat, aman, dan berkualitas dengan harga terjangkau dan bergaransi pastinya.</p>
+  </div>
 
-     <div class="product-card" onclick="selectProduct(this, 'Sc Cpanel FvckersV3 No Enc - Rp15.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc cpanel fvckersV3 no enc" />
-        <span>Sc Cpanel FvckersV3 No Enc - Rp15.000</span>
-      </div>
-      
-      <div class="product-card" onclick="selectProduct(this, 'Sc Itachi MD No Enc - Rp55.000')">
-        <img src="https://files.catbox.moe/hfvl9y.jpg" alt="sc itachi md no enc" />
-        <span>Sc Itachi MD No Enc - Rp55.000</span>
+  <!-- Produk -->
+  <h2>List Harga Reseller/Adp/Pt Panel</h2>
+  <div class="marketplace" id="marketplace1">
+    <div class="product" data-name="Reseller Panel" data-price="7000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="Create panel lewat bot, Bisa jual panel, Bisa create panel bebas asal ngotak, Permanent.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Reseller Panel</h3>
+        <div class="price">Rp 7.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
       </div>
     </div>
-
-    <div class="payment">
-      <h3>Metode Pembayaran:</h3>
-      <div class="payment-option" onclick="selectPayment(this, 'DANA')">
-        <img src="https://files.catbox.moe/ywg4hq.jpg" alt="DANA" />
-        <span>DANA</span>
-      </div>
-      
-      <div class="payment-option" onclick="selectPayment(this, 'OVO')">
-        <img src="https://files.catbox.moe/3sgf4s.jpg" alt="OVO" />
-        <span>OVO</span>
-      </div>
-      
-      <div class="payment-option" onclick="selectPayment(this, 'GOPAY')">
-        <img src="https://files.catbox.moe/s4rd2a.jpg" alt="GOPAY" />
-        <span>GOPAY</span>
-      </div>
-      
-      <div class="payment-option" onclick="selectPayment(this, 'QRIS')">
-        <img src="https://files.catbox.moe/hvy8on.jpg" alt="QRIS" />
-        <span>QRIS</span>
+    <div class="product" data-name="AdminPanel" data-price="15000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="Bisa akses panel, Bisa create panel bebas ram/disk/cpu, Bisa open reseller panel, bisa jual panel, Balmod kalo usaha, Permanent.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Admin Panel</h3>
+        <div class="price">Rp 15.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
       </div>
     </div>
-
- <div class="submit">
-      <button onclick="orderNow()"><strong>Beli Sekarang</strong></button>
+    <div class="product" data-name="Partner Panel" data-price="20000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="Bisa akses panel, Bisa Create panel bebas ram/disk/cpu, Bisa open admin panel, Bisa open reseller panel, Bisa jual panel, Balmod kalo usaha, Permanent">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Partner Panel</h3>
+        <div class="price">Rp 20.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    let selectedProduct = "";
-    let selectedPayment = "";
+  <!-- Produk1 -->
+  <h2>List Harga Panel Private</h2>
+  <div class="marketplace" id="marketplace1">
+    <div class="product" data-name="Panel 1gb" data-price="2000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="
+🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 1000
+🛢 DISK : 1000
+📽️ CPU : 40%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 1gb</h3>
+        <div class="price">Rp 2.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 2gb" data-price="3000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 2000
+🛢 DISK : 1000
+📽️ CPU : 60%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 2gb</h3>
+        <div class="price">Rp 3.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 3gb" data-price="4000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 3000
+🛢 DISK : 2000
+📽️ CPU : 80%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 3gb</h3>
+        <div class="price">Rp 4.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 4gb" data-price="5000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 4000
+🛢 DISK : 3000
+📽 CPU : 100%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 4gb</h3>
+        <div class="price">Rp 5.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 5gb" data-price="6000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 5000
+🛢 DISK : 4000
+📽 CPU : 120%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 5gb</h3>
+        <div class="price">Rp 6.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 6gb" data-price="7000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 6000
+🛢 DISK : 5000
+📽 CPU : 140%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 6gb</h3>
+        <div class="price">Rp 7.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 7gb" data-price="8000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 7000
+🛢 DISK : 6000
+📽 CPU : 160%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 7gb</h3>
+        <div class="price">Rp 8.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 8gb" data-price="9000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 8000
+🛢 DISK : 7000
+📽 CPU : 160%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 8gb</h3>
+        <div class="price">Rp 9.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 9gb" data-price="10000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 9000
+🛢 DISK : 8000
+📽 CPU : 180%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 9gb</h3>
+        <div class="price">Rp 10.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 10gb" data-price="11000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 10000
+🛢 DISK : 9000
+📽 CPU : 200%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 10gb</h3>
+        <div class="price">Rp 11.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel Unli" data-price="12000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : Unli/0
+🛢 DISK : Unli/0
+📽 CPU : Unli/0%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel Unli</h3>
+        <div class="price">Rp 12.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+  </div>
 
-    function selectProduct(el, product) {
-      document.querySelectorAll('.product-card').forEach(p => p.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedProduct = product;
+  <!-- Produk2 -->
+  <h2>List Harga Panel Publik</h2>
+  <div class="marketplace" id="marketplace1">
+    <div class="product" data-name="Panel 1gb" data-price="1000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="
+🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 1000
+🛢 DISK : 1000
+📽️ CPU : 40%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 1gb</h3>
+        <div class="price">Rp 1.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 2gb" data-price="2000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 2000
+🛢 DISK : 1000
+📽️ CPU : 60%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 2gb</h3>
+        <div class="price">Rp 2.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 3gb" data-price="3000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 3000
+🛢 DISK : 2000
+📽️ CPU : 80%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 3gb</h3>
+        <div class="price">Rp 3.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 4gb" data-price="4000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 4000
+🛢 DISK : 3000
+📽 CPU : 100%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 4gb</h3>
+        <div class="price">Rp 4.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 5gb" data-price="5000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 5000
+🛢 DISK : 4000
+📽 CPU : 120%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 5gb</h3>
+        <div class="price">Rp 5.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 6gb" data-price="6000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 6000
+🛢 DISK : 5000
+📽 CPU : 140%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 6gb</h3>
+        <div class="price">Rp 6.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 7gb" data-price="7000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 7000
+🛢 DISK : 6000
+📽 CPU : 160%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 7gb</h3>
+        <div class="price">Rp 7.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 8gb" data-price="8000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 8000
+🛢 DISK : 7000
+📽 CPU : 160%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 8gb</h3>
+        <div class="price">Rp 8.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 9gb" data-price="9000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 9000
+🛢 DISK : 8000
+📽 CPU : 180%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 9gb</h3>
+        <div class="price">Rp 9.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel 10gb" data-price="10000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : 10000
+🛢 DISK : 9000
+📽 CPU : 200%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel 10gb</h3>
+        <div class="price">Rp 10.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Panel Unli" data-price="11000" data-img="https://files.catbox.moe/l1cya6.jpg" data-desc="🕐 akses panel 1 Bulan
+♻️ Garansi 15 Hari unlimited replace
+💾 RAM : Unli/0
+🛢 DISK : Unli/0
+📽 CPU : Unli/0%.">
+      <img src="https://files.catbox.moe/l1cya6.jpg" alt="Panel">
+      <div class="product-info">
+        <h3>Panel Unli</h3>
+        <div class="price">Rp 11.000</div>
+        <button class="btn detail-btn">Detail Produk</button>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Produk3 -->
+  <h2>List Harga Jasa</h2>
+  <div class="marketplace" id="marketplace1">
+    <div class="product" data-name="Jasa Add Fitur" data-price="5000" data-img="https://files.catbox.moe/xtme5q.png" data-desc="">
+      <img src="https://files.catbox.moe/xtme5q.png" alt="Jasa">
+      <div class="product-info">
+        <h3>Jasa Add Fitur</h3>
+        <div class="price">Rp 5.000 (1Fitur)</div>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Jasa Add Key" data-price="10000" data-img="https://files.catbox.moe/xtme5q.png" data-desc="">
+      <img src="https://files.catbox.moe/xtme5q.png" alt="Jasa">
+      <div class="product-info">
+        <h3>Jasa Add Key</h3>
+        <div class="price">Rp 10.000</div>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Jasa Rename Sc" data-price="15000" data-img="https://files.catbox.moe/xtme5q.png" data-desc="">
+      <img src="https://files.catbox.moe/xtme5q.png" alt="Jasa">
+      <div class="product-info">
+        <h3>Jasa Rename Sc</h3>
+        <div class="price">Rp 15.000</div>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Jasa Fix Sc Error" data-price="15000" data-img="https://files.catbox.moe/xtme5q.png" data-desc="">
+      <img src="https://files.catbox.moe/xtme5q.png" alt="Jasa">
+      <div class="product-info">
+        <h3>Jasa Fix Sc Error</h3>
+        <div class="price">Rp 15.000</div>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+    <div class="product" data-name="Jasa Add Database Github" data-price="25000" data-img="https://files.catbox.moe/xtme5q.png" data-desc="">
+      <img src="https://files.catbox.moe/xtme5q.png" alt="Jasa">
+      <div class="product-info">
+        <h3>Jasa Add Database Github</h3>
+        <div class="price">Rp 25.000</div>
+        <button class="btn btn-secondary buy-btn">Beli Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2 id="modalName"></h2>
+      <img id="modalImg" src="" alt="">
+      <!-- Mode Detail -->
+      <div id="detailSection"></div>
+      <!-- Mode Beli -->
+      <div id="buySection">
+        <input type="text" id="receiverName" placeholder="Masukkan Nama Penerima">
+        <div class="quantity-control">
+          <button id="minusBtn">-</button>
+          <span id="quantity">1</span>
+          <button id="plusBtn">+</button>
+        </div>
+        <div class="coupon-area">
+          <input type="text" id="couponCode" placeholder="Kode Kupon (Opsional)">
+          <button id="applyCoupon" class="btn">% Terapkan</button>
+        </div>
+        <div class="price-info">
+          <p>Harga Satuan: <b id="modalPrice"></b></p>
+          <p>Jumlah Item: <b id="itemCount">1</b></p>
+          <p>Subtotal: <b id="subtotalPrice"></b></p>
+          <p style="font-size:16px;">Total Pembayaran: <b id="totalPrice" style="color:#0a7c2f;"></b></p>
+        </div>
+        <a href="#" id="buyNowBtn" class="wa-btn">Kirim Pesanan Langsung via WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function dragScroll(containerId){const s=document.getElementById(containerId);let d=false,X,L;s.addEventListener('mousedown',e=>{d=true;X=e.pageX-s.offsetLeft;L=s.scrollLeft});s.addEventListener('mouseleave',()=>d=false);s.addEventListener('mouseup',()=>d=false);s.addEventListener('mousemove',e=>{if(!d)return;e.preventDefault();const x=e.pageX-s.offsetLeft;const w=(x-X)*1.5;s.scrollLeft=L-w})}
+  dragScroll('marketplace1');
+
+  const modal=document.getElementById('productModal'),
+        modalImg=document.getElementById('modalImg'),
+        modalName=document.getElementById('modalName'),
+        detailSection=document.getElementById('detailSection'),
+        buySection=document.getElementById('buySection'),
+        modalPrice=document.getElementById('modalPrice'),
+        subtotalPrice=document.getElementById('subtotalPrice'),
+        totalPriceEl=document.getElementById('totalPrice'),
+        itemCount=document.getElementById('itemCount'),
+        quantityEl=document.getElementById('quantity'),
+        receiverName=document.getElementById('receiverName'),
+        buyNowBtn=document.getElementById('buyNowBtn');
+  let currentPrice=0,currentQuantity=1,discount=0;
+
+  function openModal(product,mode){
+    currentPrice=parseInt(product.dataset.price);
+    currentQuantity=1;discount=0;
+    modalImg.src=product.dataset.img;
+    modalName.textContent=product.dataset.name;
+    detailSection.textContent=product.dataset.desc;
+    modalPrice.textContent="Rp "+currentPrice.toLocaleString();
+    quantityEl.textContent=currentQuantity;
+    updateTotal();
+    if(mode==="detail"){ 
+      detailSection.style.display="block";
+      buySection.style.display="none";
+    }else{ 
+      detailSection.style.display="none";
+      buySection.style.display="block";
     }
+    modal.classList.add('show');
+  }
 
-    function selectPayment(el, method) {
-      document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedPayment = method;
-    }
+  document.querySelectorAll('.detail-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{const p=e.target.closest('.product');openModal(p,"detail");});
+  });
+  document.querySelectorAll('.buy-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{const p=e.target.closest('.product');openModal(p,"buy");receiverName.focus();});
+  });
 
-    function orderNow() {
-      if (!selectedProduct || !selectedPayment) {
-        alert("Silakan pilih produk dan metode pembayaran dulu.");
-        return;
-      }
+  document.getElementById('plusBtn').addEventListener('click',()=>{currentQuantity++;quantityEl.textContent=currentQuantity;updateTotal()});
+  document.getElementById('minusBtn').addEventListener('click',()=>{if(currentQuantity>1){currentQuantity--;quantityEl.textContent=currentQuantity;updateTotal()}});
+  document.getElementById('applyCoupon').addEventListener('click',()=>{
+    const code=document.getElementById('couponCode').value.trim().toUpperCase();
+    if(code==="NANALOVE"){discount=0.1;alert("Kupon berhasil diterapkan! Diskon 10%")}else{discount=0;alert("Kupon tidak valid")}
+    updateTotal();
+  });
 
-      const message = `${selectedPayment} bang gw pengen beli Produk ${selectedProduct}`;
-      const phoneNumber = "6282115117899";
-      const encodedMessage = encodeURIComponent(message);
+  function updateTotal(){
+    const subtotal=currentPrice*currentQuantity;
+    const total=subtotal-(subtotal*discount);
+    subtotalPrice.textContent="Rp "+subtotal.toLocaleString();
+    totalPriceEl.textContent="Rp "+total.toLocaleString();
+    itemCount.textContent=currentQuantity;
+  }
 
-      window.location.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    }
+  document.getElementById('closeModal').addEventListener('click',()=>modal.classList.remove('show'));
+  window.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
 
-    function toggleMenu() {
-      const nav = document.getElementById('nav');
-      const main = document.querySelector('.contact-container');
-      const open = nav.style.display !== 'flex';
-      nav.style.display = open ? 'flex' : 'none';
-      main.classList.toggle('blur', open);
-    }
+  buyNowBtn.addEventListener('click',()=>{
+    const name=receiverName.value.trim();if(!name){alert("Masukkan nama penerima!");return;}
+    const productName=modalName.textContent;
+    const subtotal=currentPrice*currentQuantity;
+    const total=subtotal-(subtotal*discount);
+    const waText=`👋Halo bang swiper, saya ingin membeli:
+--------------------------------------
+📦 *Produk:* ${productName}
+👤 *Nama Penerima:* ${name}
+🔢 *Jumlah Produk:* ${currentQuantity}
+💰 *Harga Satuan:* Rp ${currentPrice.toLocaleString()}
+💵 *SUBTOTAL:* Rp ${subtotal.toLocaleString()}
+--------------------------------------
+💳 *Total Pembayaran:* Rp ${total.toLocaleString()}
+--------------------------------------
 
-    // Tambahkan delay index untuk animasi produk dan pembayaran
-    document.querySelectorAll('.product-card').forEach((el, i) => {
-      el.style.setProperty('--i', i + 1);
-    });
-    document.querySelectorAll('.payment-option').forEach((el, i) => {
-      el.style.setProperty('--i', i + 1);
-    });
-  </script>
+Mohon informasi langkah selanjutnya untuk pembayaran.
+
+Terima kasih!`;
+    window.open(`https://wa.me/6282120820483?text=${encodeURIComponent(waText)}`,"_blank");
+  });
+</script>
 </body>
 </html>
